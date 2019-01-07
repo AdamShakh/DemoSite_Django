@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" href="./static/answer_icon.png" type="image/png">
+    <title>{{ title }}</title>
+    <style>
+        body{
+            color: #25ffac;
+            background-color: #be72ff;
+        }
+        .button{
+            color: #6cff00;
+            font-weight: 600;
+            background-color: #1662ff;
+            padding: .5em;
+        }
+    </style>
+</head>
+<body>
+    <h1>{{ title }}</h1>
+    <h2 style="padding: 2em;">{{ answer }}</h2>
+    <a href="{{ riddleSite }}" class="button">Ссылко на Загадку</a>
+    <p style="margin: 1.3em"></p>
+    <a href="{{ indexSite }}" class="button">Главная</a>
+</body>
+</html>

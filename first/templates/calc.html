@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" href="./static/calc_icon.png" type="image/png">
+    <title>{{ title }}</title>
+</head>
+<body>
+    <h1>{{ header }}</h1>
+
+    {% if error %}
+    <p>вы что пёс , вы вызвало ощибко</p>
+    <p>Подробности : {{ error }}</p>
+    {% else %}
+    <p>первое число : {{ a }}</p>
+    <p>второе число : {{ b }}</p>
+    <p>Сумма чисел {{ a }} и {{ b }} равна {{ c }}</p>
+    {% endif %}
+
+    <p style="margin: 3em"></p>
+    <table style="background-color: #2eff43" border="10px">
+        <tr>
+            <td>id</td>
+            <td>Дата</td>
+            <td>a</td>
+            <td>b</td>
+            <td>result</td>
+            <td>Автор</td>
+        </tr>
+        {% for item in history %}
+        <tr>
+            <td>{{ item.id }}</td>
+            <td>{{ item.date }}</td>
+            <td>{{ item.first }}</td>
+            <td>{{ item.second }}</td>
+            <td>{{ item.result }}</td>
+            <td>{{ item.author }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <p style="margin: 3em"></p>
+    <a href="{{ indexSite }}">ГлавнаяПэйдж</a>
+</body>
+</html>

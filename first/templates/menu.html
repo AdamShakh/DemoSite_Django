@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" href="./static/menu1.png" type="image/png">
+    <title>{{ title }}</title>
+    <style>
+        body{
+            width: 70%;
+            margin-top: 1em;
+            font-family: sans-serif;
+			font-weight: 600;
+            color: #ff7800;
+            background-color: #d9ff76;
+            font-size: 1.2em;
+            padding: 1em;
+        }
+        .button{
+            width: 30%;
+            color: #ff0000;
+            background-color: #ffc500;
+            margin-bottom: 5em;
+            padding: .5em;
+            margin-right: .7em;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>
+        {{ title }}
+    </h1>
+
+{#    <ul>#}
+{#        {% for site in allSitesbtn %}#}
+{#        <li style="margin-top: 2em;"><a href="{{ allSitesbtn[site] }}" class="button">{{ site }}</a></li>#}
+{#        {% endfor %}#}
+{#    </ul>#}
+
+    <ul>
+        <li style="margin-top: 2em;"><a href="{{ indexSite }}" class="button">Главная</a></li>
+        <li style="margin-top: 2em;"><a href="{{ adminSite }}" class="button">Админка</a></li>
+        <li style="margin-top: 2em;"><a href="{{ riddleSite }}" class="button">Заhадка</a></li>
+        <li style="margin-top: 2em;"><a href="{{ answerSite }}" class="button">Ответо</a></li>
+        <li style="margin-top: 2em;"><a href="{{ calcSite }}" class="button">Калбкулято</a></li>
+        <li style="margin-top: 2em;"><a href="{{ idkSite }}" class="button">прост из приложения Second</a></li>
+        <li style="margin-top: 2em;"><a href="{{ multiplytableSite }}" class="button">Таблица умножения</a></li>
+    </ul>
+
+</body>
+</html>
