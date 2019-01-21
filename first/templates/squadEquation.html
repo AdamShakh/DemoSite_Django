@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" href="./static/calc_icon.png" type="image/png">
+    <title>{{ title }}</title>
+</head>
+
+    <h1>{{ header }} , {{ user }}</h1>
+
+    <hr>
+    <form action="/squadequal/" method="post">
+        {% csrf_token %}
+        {{ cform.a }}{{ cform.a.label }}
+        {{ cform.b }}{{ cform.b.label }}
+        {{ cform.c }}{{ cform.c.label }}
+
+        {% for error in field.errors %}
+            <p style="color: red">{{ error }}</p>
+        {% endfor %}
+
+        <p><input type="submit" value="Вычислить"></p>
+    </form>
+    <hr>
+
+    {% if type == 'none' %}
+    <p>первое число : {{ a }}</p>
+    <p>второе число : {{ b }}</p>
+    <p>третье число : {{ c }}</p>
+    <br>
+    <p>Тута нет иксов</p>
+    {% else %}
+        {% if type == 'one' %}
+        <p>первое число : {{ a }}</p>
+        <p>второе число : {{ b }}</p>
+        <p>третье число : {{ c }}</p>
+        <br>
+        <p>Икс : <b>{{ x }}</b></p>
+        {% else %}
+            {% if type == 'two' %}
+            <p>первое число : {{ a }}</p>
+            <p>второе число : {{ b }}</p>
+            <p>третье число : {{ c }}</p>
+            <br>
+            <p>первый Икс : <b>{{ x1 }}</b></p>
+            <p>второй Икс : <b>{{ x2 }}</b></p>
+            {% else %}
+                {% if type == 'zeroerror' %}
+                    <p>первое число : {{ a }}</p>
+                    <p>второе число : {{ b }}</p>
+                    <p>третье число : {{ c }}</p>
+                    <br>
+                    <p style="color: red">Вы делите на Ноль наверное</p>
+                {% else %}
+                    <span style="color: green;">nothing</span>
+                {% endif %}
+            {% endif %}
+        {% endif %}
+    {% endif %}
+
+
+    <p style="margin: 3em"></p>
+    <a href="{{ indexSite }}">ГлавнаяПэйдж</a>
+</body>
+</html>

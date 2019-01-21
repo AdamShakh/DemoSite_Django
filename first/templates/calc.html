@@ -5,8 +5,23 @@
     <link rel="shortcut icon" href="./static/calc_icon.png" type="image/png">
     <title>{{ title }}</title>
 </head>
-<body>
+
     <h1>{{ header }}</h1>
+
+    <hr>
+    <form action="/calc/" method="post">
+        {% csrf_token %}
+        {{ cform.first.label }} : {{ cform.first }}
+        <p></p>
+        {{ cform.second.label }} : {{ cform.second }}
+
+        {% for error in field.errors %}
+            <p style="color: red">{{ error }}</p>
+        {% endfor %}
+
+        <p><input type="submit" value="Вычислить"></p>
+    </form>
+    <hr>
 
     {% if error %}
     <p>вы что пёс , вы вызвало ощибко</p>

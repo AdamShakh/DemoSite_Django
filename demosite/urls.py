@@ -18,14 +18,20 @@ from django.contrib import admin
 from django.urls import path
 from first import views
 from second import views as views2
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.index_page),
-    path('calc/', views.calculator_page),
+    path('', views.index_page, name='home'),
+    path('calc/', views.calculator_page, name='calc'),
+    path('squadequal/', views.squadEqual, name='squadEqual'),
     path('idk/', views2.index_page),
     path('riddle/', views.riddle),
     path('answer/', views.answer),
     path('menu/', views.menu_page),
-    path('multiply/', views.multiply_page)
+    path('multiply/', views.multiply_page),
+
+    path('login/', auth_views.LoginView.as_view()),
+    path('logout/', auth_views.LogoutView.as_view()),
+    path('signup/', views.signup),
 ]
