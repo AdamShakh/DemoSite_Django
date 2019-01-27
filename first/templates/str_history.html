@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+</head>
+<body>
+<h1>{{ header }}</h1>
+<hr>
+
+<table style="background-color: #1bff6c" border="10px">
+    <tr>
+        <td>id</td>
+        <td>Дата</td>
+        <td>Время</td>
+        <td>Входная строка</td>
+        <td>Колво Слов</td>
+        <td>Колво Чисел</td>
+        <td>Пользователь</td>
+    </tr>
+    {% for item in history %}
+    <tr>
+        <td>{{ item.id }}</td>
+        <td>{{ item.date }}</td>
+        <td>{{ item.time }}</td>
+        <td>{{ item.stroka0 }}</td>
+        <td>{{ item.countWords }}</td>
+        <td>{{ item.countNumbers }}</td>
+        <td>{{ item.userWas }}</td>
+    </tr>
+    {% endfor %}
+</table>
+<p>{{ idk }}</p>
+<p style="margin: 3em"></p>
+<a style="color: #ff9d00;" href="{{ str2words }}">Стринаца Парсинг Машины</a>
+<p></p>
+<a href="{{ indexSite }}">ГлавнаяПэйдж</a>
+</body>
+</html>

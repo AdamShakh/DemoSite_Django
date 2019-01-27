@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+</head>
+<body>
+
+    <h1>{{ header }} , {{ user }}</h1>
+
+    <hr>
+    <form action="/str2words/" method="post">
+        {% csrf_token %}
+
+        {{ cform.stroka }}
+
+        <p><input type="submit" value="Пропарсить"></p>
+    </form>
+    <hr>
+
+    {% if not error %}
+        <p>Всего слов в этой строке - <b>{{ countWords }}</b></p>
+        <p>Всего чисел в даннйо стрке - <b>{{ countNumbers }}</b></p>
+
+        <br>
+
+        {% if countWords > 0 %}
+            <p>Список всех Слов</p>
+            <ol>
+                {% for word in allWords %}
+                <li><b>{{ word }}</b></li>
+                <p></p>
+                {% endfor %}
+            </ol>
+        {% endif %}
+        <p></p>
+        {% if countNumbers > 0 %}
+            <p>Список всех Чисел</p>
+            <ol>
+                {% for number in allNumbers %}
+                <li><b>{{ number }}</b></li>
+                <p></p>
+                {% endfor %}
+            </ol>
+        {% endif %}
+
+    {% else %}
+        <p style="color: red">{{ error }}</p>
+    {% endif %}
+
+
+
+    <p style="margin: 3em"></p>
+    <a style="color: #ff9d00;" href="{{ str_history }}">История Парсинга</a>
+    <p></p>
+    <a href="{{ indexSite }}">ГлавнаяПэйдж</a>
+</body>
+</html>

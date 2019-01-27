@@ -30,6 +30,8 @@ urlpatterns = [
     path('answer/', views.answer),
     path('menu/', views.menu_page),
     path('multiply/', views.multiply_page),
+    path('str2words/', views.str2words),
+    path('str_history/', views.str_history),
 
     path('login/', auth_views.LoginView.as_view()),
     path('logout/', auth_views.LogoutView.as_view()),

@@ -33,6 +33,10 @@ class SquadEquation(forms.Form):
         max_value=1000,
     )
 
+class str2wordsForm(forms.Form):
+    stroka = forms.CharField(label='stroka', max_length=255)
+
+
 class SignUpForm(UserCreationForm):
     first_name = forms.CharField(max_length=30, required=False, help_text='Optional')
     last_name = forms.CharField(max_length=30, required=False, help_text='Optional')

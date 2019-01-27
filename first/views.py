@@ -1,13 +1,14 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
-import datetime
+from datetime import datetime
+from django.utils.timezone import now, pytz
 from django.contrib.auth import login as auth_login, logout as auth_logout, authenticate
 from django.contrib.auth.forms import AuthenticationForm
-from .forms import SignUpForm, SquadEquation
+from .forms import CalcForm, SignUpForm, SquadEquation, str2wordsForm
 
-from first.forms import CalcForm
-from first.models import CalcHistory
+from first.models import CalcHistory, StrParsHistory
+
 
 # Create your views here.
 
@@ -19,81 +20,82 @@ from first.models import CalcHistory
 #         ip = request.META.get('REMOTE_ADDR')
 #     return ip
 def get_client_http_host(request):
-    return 'http://' + request.META.get('HTTP_HOST')
+    return 'http://' + request.META.get('HTTP_HOST') if request else 'http://127.0.0.1:8000'
 
 def get_client_LOGNAME_OSname(request):
     return [request.META.get('LOGNAME'), request.META.get('DESKTOP_SESSION')]
 
-
-def index_page(request):
-    title = 'Курс "Промышленное программирование"'
-    lines = []
-    lines.append('Занятие №12')
-    lines.append('Тема: "Знакомство с Django"')
-    d1, d2, d3 = (lambda d: map(str, [d.day, d.month, d.year]))(datetime.datetime.now())
-    lines.append('Сегодня - {}.{}.{}'.format(d1, d2, d3))
-
-
-    author_name = "Adam"
-    page_count = 1
-    curreny_date = datetime.datetime.now()
+def get_base_context(request=False):
     context = {
-        'author': author_name,
-        'title': title,
-        'icon': './static/index_icon.png',
-        'pcount': page_count,
-        'date': curreny_date,
-        'lines': lines,
+        'author': 'Adam',
+        'date': datetime.now(),
+        'current_user': request.user if request else '',
+
+        'indexSite': get_client_http_host(request),
+
         'riddleSite': get_client_http_host(request) + '/riddle',
         'answerSite': get_client_http_host(request) + '/answer',
+
         'calcSite': get_client_http_host(request) + '/calc',
         'squadEqiual': get_client_http_host(request) + '/squadequal',
         'multiplytableSite': get_client_http_host(request) + '/multiply',
-        'indexSite': get_client_http_host(request),
+        'str2words': get_client_http_host(request) + '/str2words',
+        'str_history': get_client_http_host(request) + '/str_history',
+
         'menuSite': get_client_http_host(request) + '/menu',
+        'signup': get_client_http_host(request) + '/signup',
+        'login': get_client_http_host(request) + '/login',
+        'logout': get_client_http_host(request) + '/logout',
+        'adminSite': get_client_http_host(request) + '/admin',
+        'idkSite': get_client_http_host(request) + '/idk',
+
     }
 
-    # print('----->', get_client_ip(request))
+    return context
+
+
+def index_page(request):
+    context = get_base_context(request)
+    context.update({
+        'title': 'Курс "Промышленное программирование"',
+        'header': 'Главная',
+        'icon': './static/index_icon.png',
+    })
+
+    lines = []
+    lines.append('Занятие №12')
+    lines.append('Тема: "Знакомство с Django"')
+    d1, d2, d3 = (lambda d: map(str, [d.day, d.month, d.year]))(datetime.now())
+    lines.append('Сегодня - {}.{}.{}'.format(d1, d2, d3))
+    if str(request.user) != 'AnonymousUser': lines.append('Здравствуйте ' + str(request.user))
+    context['lines'] = lines
+
     return render(request, 'index.html', context)
 
 def menu_page(request):
-
-    allSites = {}
-    allSites['hлавная'] = get_client_http_host(request)
-    allSites['Заhадка'] = get_client_http_host(request) + '/riddle'
-    allSites['Ответо'] = get_client_http_host(request) + '/answer'
-    allSites['Калбкулято'] = get_client_http_host(request) + '/calc'
-    allSites['КвадратноеУравнение'] = get_client_http_host(request) + '/squadequal'
-    allSites['Админка'] = get_client_http_host(request) + '/admin'
-    allSites['прост'] = get_client_http_host(request) + '/idk'
-    allSites['таблицаУмножения'] = get_client_http_host(request) + '/multiply'
-
-    context = {
-        'title': 'Menu of all Site',
-        'indexSite': allSites['hлавная'],
-        'answerSite': allSites['Ответо'],
-        'riddleSite': allSites['Заhадка'],
-        'calcSite': allSites['Калбкулято'],
-        'squadEqiual': allSites['КвадратноеУравнение'],
-        'idkSite': allSites['прост'],
-        'adminSite': allSites['Админка'],
-        'multiplytableSite': allSites['таблицаУмножения'],
-        'allSitesbtn': allSites
-    }
+    context = get_base_context(request)
+    context.update({
+        'title': 'Menu of all pages',
+        'header': 'Menu',
+        'icon': '',
+    })
 
     return render(request, 'menu.html', context)
 
 @login_required(login_url='/login/')
 def calculator_page(request):
-    context = {
+    context = get_base_context(request)
+    context.update({
         'title': 'калбкулято - демосайт',
-        'icon': './static/calc_icon.png',
         'header': 'страница калькулятора',
-        'indexSite': get_client_http_host(request)
-    }
+        'icon': './static/calc_icon.png',
+    })
 
     # current_user = User.objects.get(username='LODE')
     current_user = request.user
+    history = CalcHistory.objects.all()  ###
+    # history = CalcHistory.objects.filter(author=current_user)  ###
+    context['history'] = history
 
     if request.method == 'POST':
 
@@ -191,14 +193,12 @@ def squadequal(a, b, c):
 
 @login_required(login_url='/login/')
 def squadEqual(request):
-    context = {
+    context = get_base_context(request)
+    context.update({
         'title': 'вычисление корней у квадратного уравнения',
-        'icon': './static/calc_icon.png',
         'header': 'страница Квадратного уравнения , мы поможем вам',
-        'indexSite': get_client_http_host(request)
-    }
-    # current_user = User.objects.get(username='LODE')
-    context['user'] = request.user
+        'icon': './static/calc_icon.png',
+    })
 
 
     if request.method == 'POST':
@@ -268,13 +268,77 @@ def squadEqual(request):
     return render(request, 'squadEquation.html', context)
 
 
-def multiply_page(request):
 
-    context = {
+@login_required(login_url='/login/')
+def str2words(request):
+    context = get_base_context(request)
+    context.update({
+        'title': 'Парсинг Строки',
+        'header': 'Форма Джедая',
+        'icon': './static/calc_icon.png',
+    })
+
+
+    if request.method == 'POST':
+
+        form = str2wordsForm(request.POST)
+        stroka0 = form.data['stroka']
+
+        if form.is_valid():  # проверка на валидность на сервере
+            stroka = stroka0.split(" ")
+            allWrd = [i for i in stroka if not i.isdigit() and i != '']
+            allNum = [i for i in stroka if i.isdigit()]
+            cntWrd = len(allWrd)
+            cntNum = len(allNum)
+
+            context.update({
+                'countWords': cntWrd,
+                'countNumbers': cntNum,
+                'allWords': allWrd,
+                'allNumbers': allNum,
+            })
+
+            time = str(datetime.now())
+            record = StrParsHistory(
+                date=''.join([(i if i != '-' else ' ') for i in time[:10]]),
+                time=str(int(time[11] + time[12]) + 3) + ''.join([i for i in time[13:19]]),
+                stroka0=stroka0,
+                countWords=cntWrd,
+                countNumbers=cntNum,
+                userWas=request.user
+            )
+            record.save()
+
+        else:
+            context['error'] = 'form не is_valid'
+
+        context['cform'] = form
+
+    else:
+        context['cform'] = str2wordsForm()
+        context['error'] = 'не POST'
+
+    return render(request, 'str2words.html', context)
+
+@login_required(login_url='/login/')
+def str_history(request):
+    context = get_base_context(request)
+    context.update({
+        'title': 'История Парсинга Строк',
+        'header': 'История Парсинга Строк',
+        'icon': '',
+        'history': StrParsHistory.objects.all()
+    })
+
+    return render(request, 'str_history.html', context)
+
+
+def multiply_page(request):
+    context = get_base_context(request)
+    context.update({
         'title': 'Таблица Умножения',
         'number': int(1),
-        'indexSite': get_client_http_host(request)
-    }
+    })
 
     try:
         number = int(request.GET.get('number', int(1)))  # /?number=9
@@ -289,8 +353,11 @@ def multiply_page(request):
 
     return render(request, 'multiply.html', context)
 
+
+
 def riddle(request):
-    context = {
+    context = get_base_context(request)
+    context.update({
         'title': 'Загадка собсно :',
         'icon': './static/riddle_icon.png',
         'riddle': "главная вещь вокруг которой крутится культура { "
@@ -303,28 +370,22 @@ def riddle(request):
                   "--> ru --> "
                   "протяжонность в минутах всех серий этого сериала + 10"
                   " }",
-        'answerSite': get_client_http_host(request) + '/answer',
-        'indexSite': get_client_http_host(request)
-
-
-    }
+    })
     return render(request, 'riddle.html', context)
 
 def answer(request):
-    context = {
+    context = get_base_context(request)
+    context.update({
         'title': 'Ответ на загадку :',
         'icon': './static/answer_icon.png',
         'answer': 'марихуанна',
-        'riddleSite': get_client_http_host(request) + '/riddle',
-        'indexSite': get_client_http_host(request)
-    }
+    })
     return render(request, 'answer.html', context)
 
 
 
-
 def signup(request):
-    context = {}
+    context = get_base_context(request)
     context['title'] = 'SingUp'
 
     if request.method == 'POST':
@@ -344,7 +405,7 @@ def signup(request):
 
 
 def login(request):
-    context = {}
+    context = get_base_context(request)
     context['title'] = 'LogIN'
 
     if request.method == "POST":
