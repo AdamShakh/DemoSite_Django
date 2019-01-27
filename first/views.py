@@ -346,9 +346,10 @@ def str2words(request):
                 'allNumbers': allNum,
             })
 
+            time = str(datetime.now())
             record = StrParsHistory(
-                date=datetime.now().date(),
-                time=datetime.now().time(),
+                date=''.join([(i if i != '-' else ' ') for i in time[:10]]), #datetime.now().date(),
+                time=str(int(time[11] + time[12]) + 3) + ''.join([i for i in time[13:19]]), #datetime.now().time(),
                 stroka0=stroka0,
                 countWords=cntWrd,
                 countNumbers=cntNum,
