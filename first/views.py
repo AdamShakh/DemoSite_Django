@@ -129,6 +129,54 @@ def calculator_page(request):
 
     return render(request, 'calc.html', context)
 
+
+@login_required(login_url='/login/')
+def calculator_page_new(request):
+    context = get_base_context(request)
+    context.update({
+        'title': 'калбкулято - демосайт',
+        'header': 'страница калькулятора',
+        'icon': './static/calc_icon.png',
+    })
+
+    # current_user = User.objects.get(username='LODE')
+    current_user = request.user
+    history = CalcHistory.objects.all()  ###
+    # history = CalcHistory.objects.filter(author=current_user)  ###
+    context['history'] = history
+
+    if request.method == 'POST':
+
+        form = CalcForm(request.POST)
+        first_value = form.data['first']  # first  second  это имена которые в form
+        second_value = form.data['second']
+        if form.is_valid():  # проверка на валидность на сервере
+            result = int(first_value) + int(second_value)
+            record = CalcHistory(
+                date=datetime.datetime.now(),
+                first=first_value,
+                second=second_value,
+                result=result,
+                author=current_user
+            )
+            record.save()
+
+            context.update({
+                'a': first_value,
+                'b': second_value,
+                'c': result,
+            })
+        else:
+            print('ooops ? we"ve got problems')
+            context['error'] = True
+
+        context['cform'] = form
+
+    else:
+        context['cform'] = CalcForm()
+
+    return render(request, 'newCalc.html', context)
+
 """def calculator_page(request):
     context = {
         'title': 'калбкулято - демосайт',
@@ -298,10 +346,9 @@ def str2words(request):
                 'allNumbers': allNum,
             })
 
-            time = str(datetime.now())
             record = StrParsHistory(
-                date=''.join([(i if i != '-' else ' ') for i in time[:10]]),
-                time=str(int(time[11] + time[12]) + 3) + ''.join([i for i in time[13:19]]),
+                date=datetime.now().date(),
+                time=datetime.now().time(),
                 stroka0=stroka0,
                 countWords=cntWrd,
                 countNumbers=cntNum,
