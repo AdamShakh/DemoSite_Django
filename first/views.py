@@ -6,7 +6,6 @@ from django.utils.timezone import now, pytz
 from django.contrib.auth import login as auth_login, logout as auth_logout, authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from .forms import CalcForm, SignUpForm, SquadEquation, str2wordsForm
-
 from first.models import CalcHistory, StrParsHistory
 
 
@@ -105,7 +104,7 @@ def calculator_page(request):
         if form.is_valid():  # проверка на валидность на сервере
             result = int(first_value) + int(second_value)
             record = CalcHistory(
-                date=datetime.datetime.now(),
+                date=datetime.now(),
                 first=first_value,
                 second=second_value,
                 result=result,
@@ -119,13 +118,13 @@ def calculator_page(request):
                 'c': result,
             })
         else:
-            print('ooops ? we"ve got problems')
-            context['error'] = True
+            context['error'] = 'form не is_valid'
 
         context['cform'] = form
 
     else:
         context['cform'] = CalcForm()
+        context['error'] = 'не POST'
 
     return render(request, 'calc.html', context)
 
@@ -153,7 +152,7 @@ def calculator_page_new(request):
         if form.is_valid():  # проверка на валидность на сервере
             result = int(first_value) + int(second_value)
             record = CalcHistory(
-                date=datetime.datetime.now(),
+                date=datetime.now(),
                 first=first_value,
                 second=second_value,
                 result=result,
@@ -167,13 +166,13 @@ def calculator_page_new(request):
                 'c': result,
             })
         else:
-            print('ooops ? we"ve got problems')
-            context['error'] = True
+            context['error'] = 'form не is_valid'
 
         context['cform'] = form
 
     else:
         context['cform'] = CalcForm()
+        context['error'] = 'не POST'
 
     return render(request, 'newCalc.html', context)
 
@@ -304,13 +303,13 @@ def squadEqual(request):
 
 
         else:
-            print('ooops ? we"ve got problems')
-            context['error'] = True
+            context['error'] = 'form не is_valid'
 
         context['cform'] = form
 
     else:
         context['cform'] = SquadEquation()
+        context['error'] = 'не POST'
 
 
     return render(request, 'squadEquation.html', context)
@@ -334,7 +333,7 @@ def str2words(request):
 
         if form.is_valid():  # проверка на валидность на сервере
             stroka = stroka0.split(" ")
-            allWrd = [i for i in stroka if not i.isdigit() and i != '']
+            allWrd = [i for i in stroka if i.isalnum() and not i.isdigit()]
             allNum = [i for i in stroka if i.isdigit()]
             cntWrd = len(allWrd)
             cntNum = len(allNum)
@@ -346,10 +345,10 @@ def str2words(request):
                 'allNumbers': allNum,
             })
 
-            time = str(datetime.now())
+            #time = str(datetime.now())
             record = StrParsHistory(
-                date=''.join([(i if i != '-' else ' ') for i in time[:10]]), #datetime.now().date(),
-                time=str(int(time[11] + time[12]) + 3) + ''.join([i for i in time[13:19]]), #datetime.now().time(),
+                date=datetime.now().date(),  #''.join([(i if i != '-' else ' ') for i in time[:10]]),
+                time=str(datetime.now(tz=pytz.timezone("Europe/Moscow")).time())[0:8],  #str(int(time[11] + time[12]) + 3) + ''.join([i for i in time[13:19]]),
                 stroka0=stroka0,
                 countWords=cntWrd,
                 countNumbers=cntNum,
@@ -406,7 +405,8 @@ def multiply_page(request):
 def riddle(request):
     context = get_base_context(request)
     context.update({
-        'title': 'Загадка собсно :',
+        'title': 'Загадка собсно',
+        'header': 'Загадка',
         'icon': './static/riddle_icon.png',
         'riddle': "главная вещь вокруг которой крутится культура { "
                   ""
@@ -424,7 +424,8 @@ def riddle(request):
 def answer(request):
     context = get_base_context(request)
     context.update({
-        'title': 'Ответ на загадку :',
+        'title': 'Ответ на загадку',
+        'header': 'Ответ',
         'icon': './static/answer_icon.png',
         'answer': 'марихуанна',
     })

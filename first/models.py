@@ -11,8 +11,8 @@ class CalcHistory(models.Model):
                                                 # on_delete что делать если посльзователь будет удалён ,, мусор
 
 class StrParsHistory(models.Model):
-    date = models.CharField(max_length=20) #models.DateField()
-    time = models.CharField(max_length=10) #models.TimeField()
+    date = models.DateField()
+    time = models.CharField(max_length=8)
     stroka0 = models.CharField(max_length=255)
     countWords = models.IntegerField()
     countNumbers = models.IntegerField()
