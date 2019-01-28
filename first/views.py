@@ -21,13 +21,15 @@ from first.models import CalcHistory, StrParsHistory
 def get_client_http_host(request):
     return 'http://' + request.META.get('HTTP_HOST') if request else 'http://127.0.0.1:8000'
 
+
 def get_client_LOGNAME_OSname(request):
     return [request.META.get('LOGNAME'), request.META.get('DESKTOP_SESSION')]
+
 
 def get_base_context(request=False):
     context = {
         'author': 'Adam',
-        'date': datetime.now(),
+        'date': datetime.now(tz=pytz.timezone("Europe/Moscow")),
         'current_user': request.user if request else '',
 
         'indexSite': get_client_http_host(request),
@@ -66,10 +68,12 @@ def index_page(request):
     lines.append('Тема: "Знакомство с Django"')
     d1, d2, d3 = (lambda d: map(str, [d.day, d.month, d.year]))(datetime.now())
     lines.append('Сегодня - {}.{}.{}'.format(d1, d2, d3))
-    if str(request.user) != 'AnonymousUser': lines.append('Здравствуйте ' + str(request.user))
+    if str(request.user) != 'AnonymousUser':
+        lines.append('Здравствуйте ' + str(request.user))
     context['lines'] = lines
 
     return render(request, 'index.html', context)
+
 
 def menu_page(request):
     context = get_base_context(request)
@@ -78,8 +82,8 @@ def menu_page(request):
         'header': 'Menu',
         'icon': '',
     })
-
     return render(request, 'menu.html', context)
+
 
 @login_required(login_url='/login/')
 def calculator_page(request):
@@ -92,7 +96,7 @@ def calculator_page(request):
 
     # current_user = User.objects.get(username='LODE')
     current_user = request.user
-    history = CalcHistory.objects.all()  ###
+    history = CalcHistory.objects.all()
     # history = CalcHistory.objects.filter(author=current_user)  ###
     context['history'] = history
 
@@ -102,6 +106,8 @@ def calculator_page(request):
         first_value = form.data['first']  # first  second  это имена которые в form
         second_value = form.data['second']
         if form.is_valid():  # проверка на валидность на сервере
+                # сдесь на соответствие пришедшей формы (из html) (построенно на основе forms)
+                # с созданной на сервере формой (также на основе forms)
             result = int(first_value) + int(second_value)
             record = CalcHistory(
                 date=datetime.now(),
@@ -125,117 +131,52 @@ def calculator_page(request):
     else:
         context['cform'] = CalcForm()
         context['error'] = 'не POST'
+
+    # try:
+    #     first_value = request.GET.get('a', '0')   # /?a=36&b=18
+    #     second_value= request.GET.get('b', '0')
+    #
+    #     if first_value.isdigit() and second_value.isdigit():
+    #         result = int(first_value) + int(second_value)
+    #
+    #         record = CalcHistory(
+    #             date=datetime.now(),
+    #             first=first_value,
+    #             second=second_value,
+    #             result=result,
+    #             author=current_user
+    #         )
+    #         record.save()
+    #
+    #         context.update({
+    #             'a': first_value,
+    #             'b': second_value,
+    #             'c': result,
+    #         })
+    #     else:
+    #         context['error'] = 'вы не цыфру целую ввёло в поле , а это _{}_ и это _{}_'.format(first_value, second_value)
+    #
+    # except Exception:
+    #     context['error'] = 'вы чё , вы не ввело по форме - ?a=0&b=0'
 
     return render(request, 'calc.html', context)
 
 
-@login_required(login_url='/login/')
-def calculator_page_new(request):
-    context = get_base_context(request)
-    context.update({
-        'title': 'калбкулято - демосайт',
-        'header': 'страница калькулятора',
-        'icon': './static/calc_icon.png',
-    })
-
-    # current_user = User.objects.get(username='LODE')
-    current_user = request.user
-    history = CalcHistory.objects.all()  ###
-    # history = CalcHistory.objects.filter(author=current_user)  ###
-    context['history'] = history
-
-    if request.method == 'POST':
-
-        form = CalcForm(request.POST)
-        first_value = form.data['first']  # first  second  это имена которые в form
-        second_value = form.data['second']
-        if form.is_valid():  # проверка на валидность на сервере
-            result = int(first_value) + int(second_value)
-            record = CalcHistory(
-                date=datetime.now(),
-                first=first_value,
-                second=second_value,
-                result=result,
-                author=current_user
-            )
-            record.save()
-
-            context.update({
-                'a': first_value,
-                'b': second_value,
-                'c': result,
-            })
-        else:
-            context['error'] = 'form не is_valid'
-
-        context['cform'] = form
-
-    else:
-        context['cform'] = CalcForm()
-        context['error'] = 'не POST'
-
-    return render(request, 'newCalc.html', context)
-
-"""def calculator_page(request):
-    context = {
-        'title': 'калбкулято - демосайт',
-        'icon': './static/calc_icon.png',
-        'header': 'страница калькулятора',
-        'indexSite': get_client_http_host(request)
-    }
-
-    # current_user = User.objects.get(username='LODE')
-    current_user = request.user
-    history = CalcHistory.objects.all()  ###
-    # history = CalcHistory.objects.filter(author=current_user)  ###
-    context['history'] = history
-
-    try:
-        first_value = request.GET.get('a', '0')   # /?a=36&b=18
-        second_value= request.GET.get('b', '0')
-
-
-
-        if first_value.isdigit() and second_value.isdigit():
-            result = int(first_value) + int(second_value)
-
-            record = CalcHistory(
-                date=datetime.datetime.now(),
-                first=first_value,
-                second=second_value,
-                result=result,
-                author=current_user
-            )
-            record.save()
-
-            context.update({
-                'a': first_value,
-                'b': second_value,
-                'c': result,
-            })
-        else:
-            context['error'] = 'вы не цыфру целую ввёло в поле , а это _{}_ и это _{}_'.format(first_value, second_value)
-
-    except Exception:
-        context['error'] = 'вы чё , вы не ввело по форме - ?a=0&b=0'
-
-    return render(request, 'calc.html', context)"""
-
-def squadequal(a, b, c):
+def squadEqualXes(a, b, c):
     des = b ** 2 - 4 * a * c
 
     if a == 0:
-        return 'zeroerror'
+        return {'type': 'zeroerror'}
     elif des > 0:
         import math
         x1 = (-b + math.sqrt(des)) / (2 * a)
         x2 = (-b - math.sqrt(des)) / (2 * a)
-        return (x1, x2)
+        return {'type': 'two', 'value': [x1, x2]}
     elif des == 0:
         x = -b / (2 * a)
-        return ([x])
-    else:
-        return (False)
+        return {'type': 'one', 'value': [x]}
+    elif des < 0:
+        return {'type': 'no'}
 
 
 @login_required(login_url='/login/')
@@ -247,7 +188,6 @@ def squadEqual(request):
         'icon': './static/calc_icon.png',
     })
 
-
     if request.method == 'POST':
 
         form = SquadEquation(request.POST)
@@ -256,51 +196,35 @@ def squadEqual(request):
         third_value = int(form.data['c'])
 
         if form.is_valid():  # проверка на валидность на сервере
-            xexes = squadequal(float(first_value), float(second_value), float(third_value))
+            xexes = squadEqualXes(float(first_value), float(second_value), float(third_value))
+            context.update({
+                'a': first_value,
+                'b': second_value,
+                'c': third_value,
+            })
 
-
-            if (xexes == False):
+            if xexes['type'] == 'two':
+                x1 = xexes['value'][0]
+                x2 = xexes['value'][1]
                 context.update({
-                    'a': first_value,
-                    'b': second_value,
-                    'c': third_value,
-                    'type': 'none'
-                })
-            elif (len(xexes) == 2):
-                x1 = xexes[0]
-                x2 = xexes[1]
-                context.update({
-                    'a': first_value,
-                    'b': second_value,
-                    'c': third_value,
                     'x1': round(x1, 5),
                     'x2': round(x2, 5),
                     'type': 'two'
                 })
-            elif (len(xexes) == 1):
-                x = xexes[0]
+            elif xexes['type'] == 'one':
+                x = xexes['value'][0]
                 context.update({
-                    'a': first_value,
-                    'b': second_value,
-                    'c': third_value,
                     'x': round(x, 5),
                     'type': 'one'
                 })
-            elif (xexes == 'zeroerror'):
+            elif xexes['type'] == 'zeroerror':
                 context.update({
-                    'a': first_value,
-                    'b': second_value,
-                    'c': third_value,
                     'type': 'zeroerror'
                 })
-            else:
+            elif xexes['type'] == 'no':
                 context.update({
-                    'a': first_value,
-                    'b': second_value,
-                    'c': third_value,
-                    'type': 'error'
+                    'type': 'no'
                 })
-
 
         else:
             context['error'] = 'form не is_valid'
@@ -311,9 +235,7 @@ def squadEqual(request):
         context['cform'] = SquadEquation()
         context['error'] = 'не POST'
 
-
     return render(request, 'squadEquation.html', context)
-
 
 
 @login_required(login_url='/login/')
@@ -324,7 +246,6 @@ def str2words(request):
         'header': 'Форма Джедая',
         'icon': './static/calc_icon.png',
     })
-
 
     if request.method == 'POST':
 
@@ -345,10 +266,10 @@ def str2words(request):
                 'allNumbers': allNum,
             })
 
-            #time = str(datetime.now())
+            # time = str(datetime.now())
             record = StrParsHistory(
-                date=datetime.now().date(),  #''.join([(i if i != '-' else ' ') for i in time[:10]]),
-                time=str(datetime.now(tz=pytz.timezone("Europe/Moscow")).time())[0:8],  #str(int(time[11] + time[12]) + 3) + ''.join([i for i in time[13:19]]),
+                date=datetime.now(tz=pytz.timezone("Europe/Moscow")).date(),  # ''.join([(i if i != '-' else ' ') for i in time[:10]]),
+                time=str(datetime.now(tz=pytz.timezone("Europe/Moscow")).time())[0:8],  # str(int(time[11] + time[12]) + 3) + ''.join([i for i in time[13:19]]),
                 stroka0=stroka0,
                 countWords=cntWrd,
                 countNumbers=cntNum,
@@ -366,6 +287,7 @@ def str2words(request):
         context['error'] = 'не POST'
 
     return render(request, 'str2words.html', context)
+
 
 @login_required(login_url='/login/')
 def str_history(request):
@@ -397,9 +319,7 @@ def multiply_page(request):
         vals = [context['number'] * i for i in range(1, 11)]
         context['vals'] = vals
 
-
     return render(request, 'multiply.html', context)
-
 
 
 def riddle(request):
@@ -421,6 +341,7 @@ def riddle(request):
     })
     return render(request, 'riddle.html', context)
 
+
 def answer(request):
     context = get_base_context(request)
     context.update({
@@ -430,7 +351,6 @@ def answer(request):
         'answer': 'марихуанна',
     })
     return render(request, 'answer.html', context)
-
 
 
 def signup(request):
@@ -460,9 +380,9 @@ def login(request):
     if request.method == "POST":
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
-            fw_username = form.cleaned_data['username']
-            fw_password = form.cleaned_data['password']
-            user = authenticate(username=fw_username, password=fw_password)
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
             if user is not None:
                 if user.is_active:
                     auth_login(request, user)
