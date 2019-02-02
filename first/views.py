@@ -253,7 +253,8 @@ def str2words(request):
         stroka0 = form.data['stroka']
 
         if form.is_valid():  # проверка на валидность на сервере
-            stroka = stroka0.split(" ")
+            stroka = stroka0.split() + \
+                     [i[:len(i)-1] for i in stroka0.split() if sum(1 for j in [',', '.', '!', '?'] if j in i)]
             allWrd = [i for i in stroka if i.isalnum() and not i.isdigit()]
             allNum = [i for i in stroka if i.isdigit()]
             cntWrd = len(allWrd)
