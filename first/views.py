@@ -61,16 +61,10 @@ def index_page(request):
         'title': 'Курс "Промышленное программирование"',
         'header': 'Главная',
         'icon': './static/index_icon.png',
+        'author': 'Adam Shah',
+        'pcount': 13,
+        'date': datetime.now(tz=pytz.timezone("Europe/Moscow")),
     })
-
-    lines = []
-    lines.append('Занятие №12')
-    lines.append('Тема: "Знакомство с Django"')
-    d1, d2, d3 = (lambda d: map(str, [d.day, d.month, d.year]))(datetime.now())
-    lines.append('Сегодня - {}.{}.{}'.format(d1, d2, d3))
-    if str(request.user) != 'AnonymousUser':
-        lines.append('Здравствуйте ' + str(request.user))
-    context['lines'] = lines
 
     return render(request, 'index.html', context)
 
@@ -159,7 +153,7 @@ def calculator_page(request):
     # except Exception:
     #     context['error'] = 'вы чё , вы не ввело по форме - ?a=0&b=0'
 
-    return render(request, 'calc.html', context)
+    return render(request, 'calc/calc.html', context)
 
 
 def squadEqualXes(a, b, c):
@@ -371,7 +365,7 @@ def signup(request):
         form = SignUpForm()
 
     context['form'] = form
-    return render(request, 'signup.html', context)
+    return render(request, 'registration/signup.html', context)
 
 
 def login(request):

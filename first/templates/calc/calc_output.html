@@ -1,0 +1,23 @@
+<div class="card h-100">
+ <div class="card-header">
+    Выходные данные
+ </div>
+ <div class="card-body">
+    {% if not error %}
+    <ul>
+       <li>
+          <p class="h3">Первое число: {{ a }}
+       </li>
+       <li>
+          <p class="h3">Второе число: {{ b }}
+       </li>
+       <li>
+          <p class="h3">Сумма чисел {{ a }} и {{ b }} равна {{ c }}
+       </li>
+    </ul>
+    {% else %}
+        <p>вы что пёс , вы вызвало ощибко</p>
+        <p>Подробности : <b style="color: red">{{ error }}</b></p>
+    {% endif %}
+ </div>
+</div>

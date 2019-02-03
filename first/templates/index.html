@@ -1,49 +1,23 @@
-<!DOCTYPE html>
-<html>
-<head>
-{#    <link rel="shortcut icon" href="./static/index_icon.png" type="image/png">#}
-	<title>{{ title }}</title>
-    <style>
-        .what{
-            width: 50%;
-            margin-top: 1em;
-            font-family: sans-serif;
-			font-weight: 600;
-            color: #e86dff;
-            background-color: #4effb8;
-            font-size: 1.2em;
-            padding: 1em;
-        }
-        html{
-            height: 100%;
-            width: 100%;
-        }
-        body{
-            height: 100%;
-            width: 100%;
-        }
-        .button{
-            color: #636cff;
-            background-color: #50e4ff;
-            margin-top: 100px;
-            padding: .5em;
-            margin-right: .7em;
-        }
-    </style>
-</head>
-<body style="background-color: #edffb2">
-    <h1 class="what" style="width: 70%; font-size: 2em; background-color: #55ffee">{{ title }}</h1>
+{% extends 'base.html' %}
 
+{% block content %}
+    <p>Добро пожаловать отсюда... То есть сюда</p>
+    <p>Я серьёзно =)</p>
+    <hr>
     <ul>
-        {% for line in lines %}
-        <li class="what">{{ line }}</li>
-        {% endfor %}
+       <li>Автор сайта: {{ author }}</li>
+       <li>Количество страниц на сайте: {{ pcount }}</li>
+       <li>Текущая дата по Москве: {{ date.day }}.{{ date.month }}.{{ date.year }}</li>
     </ul>
-    <p style="margin: 5em"></p>
+    {% if request.user.is_authenticated %}
+    <p>Текущий пользователь: {{ request.user }}
+        (<a href="/logout/">Выйти</a>)
+    {% else %}
+    <p>Пользователь не авторизован на сайте
+        (<a href="/login/">Войти</a>)
+    {% endif %}
 
-{#    {% for btn in btns %}#}
-{#    <a href="{{ btns[btn] }}" class="what button">{{ btn }}</a>#}
-{#    {% endfor %}#}
+    <p></p>
     <a href="{{ riddleSite }}" class="what button">Заhадка</a>
     <a href="{{ answerSite }}" class="what button">Ответо</a>
     <a href="{{ calcSite }}" class="what button">Калбкулято</a>
@@ -56,10 +30,7 @@
     <a href="{{ logout }}" class="what button">Выйти</a>
     <a href="{{ signup }}" class="what button">Зарегаться</a>
 
-
-    <p style="margin: 5em"></p>
     <a href="{{ menuSite }}">
         <img style="width: 60px; height: 60px" src="./static/menu1.png" alt="menu Icon">
     </a>
-</body>
-</html>
+{% endblock %}
