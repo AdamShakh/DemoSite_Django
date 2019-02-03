@@ -24,6 +24,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index_page, name='home'),
     path('menu/', views.menu_page),
+    path('profile/<str:name>', views.profile_view),
 
     path('calc/', views.calculator_page, name='calc'),
     path('squadequal/', views.squadEqual, name='squadEqual'),

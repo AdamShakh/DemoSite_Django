@@ -6,18 +6,17 @@
     {% if not error %}
     <ul>
        <li>
-          <p class="h3">Первое число: {{ a }}
+          <p class="h4">Первое число: {{ a }}
        </li>
        <li>
-          <p class="h3">Второе число: {{ b }}
+          <p class="h4">Второе число: {{ b }}
        </li>
        <li>
-          <p class="h3">Сумма чисел {{ a }} и {{ b }} равна {{ c }}
+          <p class="h4">Сумма чисел {{ a }} и {{ b }} равна {{ c }}
        </li>
     </ul>
     {% else %}
-        <p>вы что пёс , вы вызвало ощибко</p>
-        <p>Подробности : <b style="color: red">{{ error }}</b></p>
+        <p style="color: green">Введиет данные</p>
     {% endif %}
  </div>
 </div>

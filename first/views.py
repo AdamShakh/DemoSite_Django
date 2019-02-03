@@ -1,11 +1,12 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect
 from datetime import datetime
 from django.utils.timezone import now, pytz
 from django.contrib.auth import login as auth_login, logout as auth_logout, authenticate
 from django.contrib.auth.forms import AuthenticationForm
-from .forms import CalcForm, SignUpForm, SquadEquation, str2wordsForm
+from first.forms import CalcForm, SignUpForm, SquadEquation, str2wordsForm
 from first.models import CalcHistory, StrParsHistory
 
 
@@ -28,7 +29,7 @@ def get_client_LOGNAME_OSname(request):
 
 def get_base_context(request=False):
     context = {
-        'author': 'Adam',
+        'author': 'Adam Shah',
         'date': datetime.now(tz=pytz.timezone("Europe/Moscow")),
         'current_user': request.user if request else '',
 
@@ -48,9 +49,17 @@ def get_base_context(request=False):
         'login': get_client_http_host(request) + '/login',
         'logout': get_client_http_host(request) + '/logout',
         'adminSite': get_client_http_host(request) + '/admin',
+
         'idkSite': get_client_http_host(request) + '/idk',
 
     }
+    context['menu'] = [
+        {'name': 'Калькулятор', 'link': context['calcSite']},
+        {'name': 'Квадр Уравн', 'link': context['squadEqiual']},
+        {'name': 'Парсинг Строк', 'link': context['str2words']},
+        {'name': 'Загадка', 'link': context['riddleSite']},
+        {'name': 'Ответ', 'link': context['answerSite']},
+    ]
 
     return context
 
@@ -61,7 +70,6 @@ def index_page(request):
         'title': 'Курс "Промышленное программирование"',
         'header': 'Главная',
         'icon': './static/index_icon.png',
-        'author': 'Adam Shah',
         'pcount': 13,
         'date': datetime.now(tz=pytz.timezone("Europe/Moscow")),
     })
@@ -77,6 +85,13 @@ def menu_page(request):
         'icon': '',
     })
     return render(request, 'menu.html', context)
+
+def profile_view(request, name):
+    try:
+        user = User.objects.get(username=name)
+        return HttpResponse('User {} exists'.format(user.username))
+    except User.DoesNotExist:
+        raise Http404
 
 
 @login_required(login_url='/login/')
