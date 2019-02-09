@@ -19,9 +19,22 @@
 
        <div class="form-group row">
           <div class="col">
-             <input type="submit" class="btn btn-primary btn-block" value="Вычислить">
+             <input type="submit" class="btn btn-success btn-block" value="Вычислить">
           </div>
        </div>
+
+
+        <div class="btn-group btn-block">
+            <button type="button" class="btn btn-block btn-primary">Вычисление</button>
+            <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="sr-only">Toggle Dropdown</span>
+            </button>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="#" onclick="calcform.submit();">Вычислить</a>
+                <a class="dropdown-item" href="#" onclick="calc();">Вычислить на фронтенде</a>
+            </div>
+        </div>
+
     </form>
  </div>
 </div>

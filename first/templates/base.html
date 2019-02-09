@@ -20,7 +20,6 @@
          }
          }
       </style>
-      <!-- Custom styles for this template -->
       <link href="https://getbootstrap.com/docs/4.2/examples/sticky-footer-navbar/sticky-footer-navbar.css" rel="stylesheet">
    </head>
    <body class="d-flex flex-column h-100">
@@ -41,6 +40,9 @@
                </ul>
                <ul class="navbar-nav">
                   {% if request.user.is_authenticated %}
+                    <li class="nav-item">
+                        <span class="nav-link">{{ current_user }}</span>
+                    </li>
                     <li class="">
                         <a class="active nav-link" href="{{ logout }}">Выйти</a>
                     </li>
@@ -64,9 +66,8 @@
             {% block content %}{% endblock %}
          </div>
       </main>
-      <footer class="footer mt-auto py-3">
+      <footer class="footer mt-4 py-3">
          <div class="container">
-            <span class="text-muted">Place sticky footer content here.</span>
             <a href="{{ indexSite }}">ГлавнаяПэйдж</a>
          </div>
       </footer>

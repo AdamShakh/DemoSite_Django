@@ -11,12 +11,13 @@
     </ul>
     {% if request.user.is_authenticated %}
     <p>Текущий пользователь: {{ request.user }}
-        (<a href="/logout/">Выйти</a>)
+        <a class="btn btn-primary" href="/logout/" role="button">Выйти</a>
     {% else %}
     <p>Пользователь не авторизован на сайте
-        (<a href="/login/">Войти</a>)
+        <a class="btn btn-primary" href="/login/" role="button">Войти</a>
     {% endif %}
 
+    <p></p>
     <a href="{{ menuSite }}">
         <img style="width: 60px; height: 60px" src="./static/menu1.png" alt="menu Icon">
     </a>
