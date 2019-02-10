@@ -17,3 +17,9 @@ class StrParsHistory(models.Model):
     countWords = models.IntegerField()
     countNumbers = models.IntegerField()
     userWas = models.ForeignKey(to=User, default=1, on_delete=models.CASCADE)
+
+
+class StudentStat(models.Model):
+    HP = models.IntegerField()
+    IQ = models.IntegerField()
+    Happiness = models.IntegerField()

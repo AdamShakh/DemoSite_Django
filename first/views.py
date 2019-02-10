@@ -7,7 +7,7 @@ from django.utils.timezone import now, pytz
 from django.contrib.auth import login as auth_login, logout as auth_logout, authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from first.forms import CalcForm, SignUpForm, SquadEquation, str2wordsForm
-from first.models import CalcHistory, StrParsHistory
+from first.models import CalcHistory, StrParsHistory, StudentStat
 
 
 # Create your views here.
@@ -52,8 +52,11 @@ def get_base_context(request=False):
 
         'idkSite': get_client_http_host(request) + '/idk',
 
+        'stundent': get_client_http_host(request) + '/student',
+
     }
     context['menu'] = [
+        {'name': 'Студент', 'link': context['stundent']},
         {'name': 'Калькулятор', 'link': context['calcSite']},
         {'name': 'Квадр Уравн', 'link': context['squadEqiual']},
         {'name': 'Парсинг Строк', 'link': context['str2words']},
@@ -85,6 +88,26 @@ def menu_page(request):
         'icon': '',
     })
     return render(request, 'menu.html', context)
+
+def student_clicker(request):
+    context = get_base_context(request)
+    context.update({
+        'header': 'Студент должен Жить',
+        'noFooter': True,
+    })
+
+
+
+    if request.method == 'POST':
+        s = request.POST['allVars'].split('*')
+        record = StudentStat(
+            HP=int(s[0]),
+            IQ=int(s[1]),
+            Happiness=int(s[2]),
+        )
+        record.save()
+
+    return render(request, 'student.html', context)
 
 def profile_view(request, name):
     try:

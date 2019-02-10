@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block main %}
+    <main style="height: 100%;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+            background-image: url(http://loveopium.ru/content/2018/01/univer/07.jpg)"
+    {#            https://cdn-profiles.tunein.com/u115411335/images/bannerx.jpg?t=635528773954670000#}
+            role="main" class="flex-shrink-0">
+
+         <div class="container">
+
+            <p></p>
+            <h2 style="color: white; display: flex; justify-content: center;
+                text-shadow: red 1px 1px 0, red -1px -1px 0,
+                 red -2px 2px 0, red 1px -1px 0;">
+                {{ header }}
+            </h2>
+
+            <div class="row" style="justify-content: space-between;">
+                <div style="margin: 1em; margin-bottom: 2em;">
+                    <div class="card h-100" style="width: 18rem;">
+                      <img class="card-img-top" height="200px" width="100px" src="https://yt3.ggpht.com/a-/AAuE7mBv-P6LXfsBJ_yjqU1M5GZKradBPEE20IdwGA=s900-mo-c-c0xffffffff-rj-k-no" alt="Card image cap">
+                      <div class="card-body">
+                        <h4 class="card-title">HP</h4>
+                        <p class="card-text">Нам нужное больше HP</p>
+                        <h1><span id="HPval" class="badge badge-success">0</span></h1>
+                        <a href="#" onclick="clickHP();" class="btn btn-outline-success">Поесть</a>
+                      </div>
+                    </div>
+                </div>
+                <div style="margin: 1em; margin-bottom: 2em;">
+                    <div class="card h-100" style="width: 18rem;">
+                      <img class="card-img-top" height="200px" width="100px" src="https://pp.userapi.com/c851216/v851216345/b2565/SeOibZdcUeA.jpg" alt="Card image cap">
+                      <div class="card-body">
+                        <h4 class="card-title">IQ</h4>
+                        <p class="card-text">Нам нужное больше IQ</p>
+                        <h1><span id="IQval" class="badge badge-danger">0</span></h1>
+                        <a href="#" onclick="clickIQ();" class="btn btn-outline-danger">Поучиться</a>
+                      </div>
+                    </div>
+                </div>
+                <div style="margin: 1em; margin-bottom: 2em;">
+                    <div class="card h-100" style="width: 18rem;">
+                      <img class="card-img-top" height="200px" width="100px" src="http://www.havelogo.com/52/S-54286-7-happy1-01.png" alt="Card image cap">
+                      <div class="card-body">
+                        <h4 class="card-title">Happiness</h4>
+                        <p class="card-text">Нам нужное больше Счастья</p>
+                        <h1><span id="Happval" class="badge badge-warning">0</span></h1>
+                        <a href="#" onclick="clickHappiness();" class="btn btn-outline-warning">Поспать</a>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" style="justify-content: center;">
+                <button onclick="makeAllGood();" style="margin: 1em;" type="button" class="btn btn-danger">Сделать всё хорошо</button>
+                <form action="/student/" method="post">
+                    {% csrf_token %}
+                    <input style="display: none" type="checkbox" checked="checked" id="allE" name="allVars" value="dfdf" class="mr-1">
+                    <button onclick="preSubmit();" type="submit" style="margin: 1em;"  class="btn btn-success">Сохранить значения на сервер</button>
+                </form>
+            </div>
+
+         </div>
+
+        {% load static %}
+            <script src="{% static 'js/student_clicker.js' %}"></script>
+
+    </main>
+
+{% endblock %}
+
+
+
+
+
+
+
