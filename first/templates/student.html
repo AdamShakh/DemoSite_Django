@@ -1,15 +1,19 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block main %}
-    <main style="height: 100%;
+    <main role="main" class="flex-shrink-0"
+          style="height: 100%;
             background-repeat: no-repeat;
             background-position: center;
             background-size: cover;
-            background-image: url(http://loveopium.ru/content/2018/01/univer/07.jpg)"
-    {#            https://cdn-profiles.tunein.com/u115411335/images/bannerx.jpg?t=635528773954670000#}
-            role="main" class="flex-shrink-0">
+            background-image: url(https://loveopium.ru/content/2018/01/univer/07.jpg)"
+          {# url({% static 'background.jpg' %}) #}
+          {# url(https://loveopium.ru/content/2018/01/univer/07.jpg) #}
+          {# https://cdn-profiles.tunein.com/u115411335/images/bannerx.jpg?t=635528773954670000 #}
+    >
 
-         <div class="container">
+        <div class="container">
 
             <p></p>
             <h2 style="color: white; display: flex; justify-content: center;
@@ -21,7 +25,9 @@
             <div class="row" style="justify-content: space-between;">
                 <div style="margin: 1em; margin-bottom: 2em;">
                     <div class="card h-100" style="width: 18rem;">
-                      <img class="card-img-top" height="200px" width="100px" src="https://yt3.ggpht.com/a-/AAuE7mBv-P6LXfsBJ_yjqU1M5GZKradBPEE20IdwGA=s900-mo-c-c0xffffffff-rj-k-no" alt="Card image cap">
+                      <img class="card-img-top" height="200px" width="100px" 
+                        src="{% static 'icons/life.png' %}" 
+                        alt="Card image of HP">
                       <div class="card-body">
                         <h4 class="card-title">HP</h4>
                         <p class="card-text">Нам нужное больше HP</p>
@@ -32,7 +38,9 @@
                 </div>
                 <div style="margin: 1em; margin-bottom: 2em;">
                     <div class="card h-100" style="width: 18rem;">
-                      <img class="card-img-top" height="200px" width="100px" src="https://pp.userapi.com/c851216/v851216345/b2565/SeOibZdcUeA.jpg" alt="Card image cap">
+                      <img class="card-img-top" height="200px" width="100px" 
+                        src="{% static 'icons/brain.png' %}" 
+                        alt="Card image of IQ">
                       <div class="card-body">
                         <h4 class="card-title">IQ</h4>
                         <p class="card-text">Нам нужное больше IQ</p>
@@ -43,7 +51,9 @@
                 </div>
                 <div style="margin: 1em; margin-bottom: 2em;">
                     <div class="card h-100" style="width: 18rem;">
-                      <img class="card-img-top" height="200px" width="100px" src="http://www.havelogo.com/52/S-54286-7-happy1-01.png" alt="Card image cap">
+                      <img class="card-img-top" height="200px" width="100px" 
+                        src="{% static 'icons/smile.png' %}"
+                        alt="Card image of Happiness">
                       <div class="card-body">
                         <h4 class="card-title">Happiness</h4>
                         <p class="card-text">Нам нужное больше Счастья</p>
@@ -63,7 +73,7 @@
                 </form>
             </div>
 
-         </div>
+        </div>
 
         {% load static %}
             <script src="{% static 'js/student_clicker.js' %}"></script>

@@ -3,7 +3,8 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect
 from datetime import datetime
-from django.utils.timezone import now, pytz
+from django.utils.timezone import now 
+import pytz
 from django.contrib.auth import login as auth_login, logout as auth_logout, authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from first.forms import CalcForm, SignUpForm, SquadEquation, str2wordsForm
