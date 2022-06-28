@@ -1,11 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Выход - simple voting</title>
-</head>
-<body>
-  <h2>Sign up</h2>
+{% extends 'baseBlank.html' %}
+
+{% block content %}
+
+    <h2>Sign up</h2>
     <form method="post">
       {% csrf_token %}
       {% for field in form %}
@@ -22,5 +19,5 @@
       {% endfor %}
       <button type="submit" class="btn btn-info">Sign up</button>
     </form>
-</body>
-</html>
+
+{% endblock %}

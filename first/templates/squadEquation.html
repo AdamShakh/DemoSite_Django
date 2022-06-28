@@ -1,16 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <link rel="shortcut icon" href="./static/calc_icon.png" type="image/png">
-    <title>{{ title }}</title>
-</head>
-<body>
+{% extends 'baseBlank.html' %}
 
-    <h1>{{ header }} , {{ user }}</h1>
+{% block content %}
 
-    <hr>
-    <form action="/squadequal/" method="post">
+    <!-- <h1>{{ header }} , {{ user }}</h1> -->
+
+    <form action="/squadequal/" method="post" style="font-size: 1.2em">
         {% csrf_token %}
         {{ cform.a }}{{ cform.a.label }}
         {{ cform.b }}{{ cform.b.label }}
@@ -19,48 +13,47 @@
         {% for error in field.errors %}
             <p style="color: red">{{ error }}</p>
         {% endfor %}
-
-        <p><input type="submit" value="Вычислить"></p>
+        
+        <p><input style="margin-top: 20px" class="btn btn-success" type="submit" value="Вычислить"></p>
     </form>
     <hr>
 
-    {% if type == 'no' %}
-    <p>первое число : {{ a }}</p>
-    <p>второе число : {{ b }}</p>
-    <p>третье число : {{ c }}</p>
-    <br>
-    <p>Тута нет иксов</p>
-    {% else %}
-        {% if type == 'one' %}
-        <p>первое число : {{ a }}</p>
-        <p>второе число : {{ b }}</p>
-        <p>третье число : {{ c }}</p>
-        <br>
-        <p>Икс : <b>{{ x }}</b></p>
+    <div style="font-size: 1.2em">
+        {% if type == 'no' %}
+        <p>Первое число : {{ a }}</p>
+        <p>Второе число : {{ b }}</p>
+        <p>Третье число : {{ c }}</p>
+        <hr>
+        <p>Тут нет иксов</p>
         {% else %}
-            {% if type == 'two' %}
-            <p>первое число : {{ a }}</p>
-            <p>второе число : {{ b }}</p>
-            <p>третье число : {{ c }}</p>
-            <br>
-            <p>первый Икс : <b>{{ x1 }}</b></p>
-            <p>второй Икс : <b>{{ x2 }}</b></p>
+            {% if type == 'one' %}
+            <p>Первое число : {{ a }}</p>
+            <p>Второе число : {{ b }}</p>
+            <p>Третье число : {{ c }}</p>
+            <hr>
+            <p>Икс : <b>{{ x }}</b></p>
             {% else %}
-                {% if type == 'zeroerror' %}
-                    <p>первое число : {{ a }}</p>
-                    <p>второе число : {{ b }}</p>
-                    <p>третье число : {{ c }}</p>
-                    <br>
-                    <p style="color: red">Вы делите на Ноль наверное</p>
+                {% if type == 'two' %}
+                <p>Первое число : {{ a }}</p>
+                <p>Второе число : {{ b }}</p>
+                <p>Третье число : {{ c }}</p>
+                <hr>
+                <p>первый Икс : <b>{{ x1 }}</b></p>
+                <p>второй Икс : <b>{{ x2 }}</b></p>
                 {% else %}
-                    <span style="color: green;">nothing</span>
+                    {% if type == 'zeroerror' %}
+                        <p>Первое число : {{ a }}</p>
+                        <p>Второе число : {{ b }}</p>
+                        <p>Третье число : {{ c }}</p>
+                        <hr>
+                        <p style="color: red">Вы наверное делите на Ноль</p>
+                    {% else %}
+                        <span style="color: green;"></span>
+                    {% endif %}
                 {% endif %}
             {% endif %}
         {% endif %}
-    {% endif %}
+    </div>
 
 
-    <p style="margin: 3em"></p>
-    <a href="{{ indexSite }}">ГлавнаяПэйдж</a>
-</body>
-</html>
+{% endblock %}
