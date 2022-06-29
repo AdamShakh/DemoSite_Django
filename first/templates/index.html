@@ -1,4 +1,5 @@
 {% extends 'baseBlank.html' %}
+{% load static %}
 
 {% block content %}
     <p>Добро пожаловать отсюда... То есть сюда</p>
@@ -19,6 +20,6 @@
 
     <p></p>
     <a href="{{ menuSite }}">
-        <img style="width: 60px; height: 60px" src="./static/menu1.png" alt="menu Icon">
+        <img style="width: 60px; height: 60px" src="{% static 'icons/menu1.png' %}" alt="menu Icon">
     </a>
 {% endblock %}

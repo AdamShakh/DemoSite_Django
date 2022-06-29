@@ -73,7 +73,7 @@ def index_page(request):
     context.update({
         'title': 'Курс "Промышленное программирование"',
         'header': 'Главная',
-        'icon': '../static/index_icon.png',
+        'icon': '../../static/icons/index_icon.png',
         'pcount': 13,
         'date': datetime.now(tz=pytz.timezone("Europe/Moscow")),
         'noFooter': True,
@@ -87,15 +87,16 @@ def menu_page(request):
     context.update({
         'title': 'Old Menu of all pages',
         'header': 'Menu',
-        'icon': '',
+        'icon': '../../static/icons/menu1.png',
     })
     return render(request, 'menu.html', context)
 
 def student_clicker(request):
     context = get_base_context(request)
     context.update({
+        'title': 'Студент Кликер',
         'header': 'Студент должен Жить',
-        'icon': '../static/student.png',
+        'icon': '../../static/icons/student.png',
         'noFooter': True,
     })
 
@@ -126,7 +127,7 @@ def calculator_page(request):
     context.update({
         'title': 'Калькулятор - демосайт',
         'header': 'Страница калькулятора',
-        'icon': '../static/calc_icon.png',
+        'icon': '../../static/icons/calc_icon.png',
     })
 
     # current_user = User.objects.get(username='LODE')
@@ -220,7 +221,7 @@ def squadEqual(request):
     context.update({
         'title': 'Вычисление корней у квадратного уравнения',
         'header': 'Страница Квадратного уравнения , мы поможем вам',
-        'icon': '../static/calc_icon.png',
+        'icon': '../../static/icons/calc_icon.png',
     })
 
     if request.method == 'POST':
@@ -279,7 +280,7 @@ def str2words(request):
     context.update({
         'title': 'Парсинг Строки',
         'header': 'Форма Джедая',
-        'icon': '../static/calc_icon.png',
+        'icon': '../../static/icons/calc_icon.png',
     })
 
     if request.method == 'POST':
@@ -331,7 +332,7 @@ def str_history(request):
     context.update({
         'title': 'История Парсинга Строк',
         'header': 'История Парсинга Строк',
-        'icon': '',
+        'icon': '../../static/icons/calc_icon.png',
         'history': StrParsHistory.objects.all()
     })
 
@@ -363,7 +364,7 @@ def riddle(request):
     context.update({
         'title': 'Загадка собсно',
         'header': 'Загадка',
-        'icon': '../static/riddle_icon.png',
+        'icon': '../../static/icons/riddle_icon.png',
         'riddle': "главная вещь вокруг которой крутится культура { "
                   ""
                   "( str( аббревиатура имени музыкальной группы того человека , "
@@ -383,7 +384,7 @@ def answer(request):
     context.update({
         'title': 'Ответ на загадку',
         'header': 'Ответ',
-        'icon': '../static/answer_icon.png',
+        'icon': '../../static/icons/answer_icon.png',
         'answer': 'марихуанна',
     })
     return render(request, 'answer.html', context)
