@@ -392,7 +392,7 @@ def answer(request):
 
 def signup(request):
     context = get_base_context(request)
-    context['title'] = 'SingUp'
+    context['title'] = 'SignUp'
 
     if request.method == 'POST':
         form = SignUpForm(request.POST)

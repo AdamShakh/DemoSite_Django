@@ -4,7 +4,7 @@ function clickHP() {
 }
 function clickIQ() {
     IQval.innerHTML = parseInt(IQval.innerHTML) + 6;
-    console.log('HQ', HQval.innerHTML);
+    console.log('IQ', IQval.innerHTML);
 }
 function clickHappiness() {
     Happval.innerHTML = parseInt(Happval.innerHTML) + 3;

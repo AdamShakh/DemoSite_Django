@@ -28,7 +28,7 @@
       <header>
          <!-- Fixed navbar -->
          <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-            <a class="navbar-brand" href="{{ indexSite }}">Demosite</a>
+            <a class="navbar-brand" href="/">Demosite</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -46,14 +46,14 @@
                         <span class="nav-link">{{ current_user }}</span>
                     </li>
                     <li class="">
-                        <a class="active nav-link" href="{{ logout }}">Выйти</a>
+                        <a class="active nav-link" href="/logout">Выйти</a>
                     </li>
                   {% else %}
                     <li class="">
-                            <a class="active nav-link" href="{{ login }}">Войти</a>
+                        <a class="active nav-link" href="/login">Войти</a>
                     </li>
                     <li class="">
-                        <a class="active nav-link" href="{{ signup }}">Регистрация</a>
+                        <a class="active nav-link" href="/signup">Регистрация</a>
                     </li>
                   {% endif %}
                </ul>
